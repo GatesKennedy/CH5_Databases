@@ -1,4 +1,5 @@
-
+Use DB_Literate
+GO
 /*=======================================
 		QUERIES SECTION
 =======================================*/
@@ -23,7 +24,7 @@ Group by a2.BkTitle, a3.BranchNAME
 Order by BkTitle, BranchName
 ;
 END
-
+GO
 --++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Create Procedure dbo.pSP_QueryTask2
 AS
@@ -93,8 +94,8 @@ BEGIN
 --==== QUERY TASK 5 ====
 --======================
 SELECT
-a1.BranchName,
-COUNT(a2.BookID)
+a1.BranchName as 'Branch Name',
+COUNT(a2.BookID) as 'Number of books Checked out'
 FROM
 tBranch a1
 INNER JOIN tLOANS a2 ON a2.BranchID = a1.BranchID
@@ -152,6 +153,8 @@ BEGIN
 --======= QUERY TASK BONUS =======
 --==== Popular Books by Branch ===
 --================================
+--Declare @branchname NVARCHAR(max);
+--Set @BranchName = null;
 SELECT 
 tBOOK.BkTitle 'Book Title',
 SUM(tCopies.N_Copies) 'Total Copies',
@@ -187,7 +190,7 @@ INNER JOIN tBOOK ON tBOOK.BookID = tLOANS.BookID
 INNER JOIN tAUTHOR ON tAUTHOR.BookID = tLOANS.BookID
 WHERE NOT tAUTHOR.AuthorNAME = 'Stephen King'
 GROUP BY tbook.BkTitle, tAUTHOR.AuthorNAME, tBOOK.bkPublisher
-ORDER BY SUM(tLOANS.BookID) DESC
+ORDER BY count(tLOANS.BookID) DESC
 ;
 END
 
